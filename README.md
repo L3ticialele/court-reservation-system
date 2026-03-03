@@ -118,7 +118,9 @@ http://localhost:3000
 ## 👩‍💻 Desenvolvido por
 
 Letícia Ferreira Pinto
+
 Estudante de Engenharia de Software - Una
+
 Técnica em Informática - Cefet-MG
 
 Projeto desenvolvido com foco em aprendizado prático de backend, autenticação e organização arquitetural.
