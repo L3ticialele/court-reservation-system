@@ -1,44 +1,51 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 class UsuarioService{
-    constructor(pool){
-        this.pool = pool
+    constructor(usuarioRepository){
+        this.usuarioRepository = usuarioRepository;
     }
 
-    async cadastrar(nome, email, senha, role = 'operador'){
-        const senhaHash = await bcrypt.hash(senha, 10)
+    async cadastrar(dados){
+        const usuarioExistente = await this.usuarioRepository.buscarPorEmail(dados.email);
         
-        const result = await this.pool.query(
-            `INSERT INTO usuarios(nome, email, senha, role)
-            VALUES($1, $2, $3, $4)
-            RETURNING id, nome, email, role`,
-            [nome, email, senhaHash, role]
-        )
+        if(usuarioExistente){
+            throw new Error('Usuário já cadastrado.');
+        }
 
-        return result.rows[0]
+        const senhaHash = await bcrypt.hash(dados.senha, 10);
+
+        return this.usuarioRepository.cadastrar({
+            ...dados,
+            senha: senhaHash
+        });
     }
 
-    async login(email, senha){
-        const result = await this.pool.query(
-            `SELECT * FROM usuarios WHERE email = $1`,
-            [email]
-        )
+    async login(dados){
+        const usuario = await this.usuarioRepository.buscarPorEmail(dados.email);
 
-        const usuario = result.rows[0]
-        if(!usuario) throw new Error('Email ou senha inválidos')
+        if(!usuario) throw new Error('Email ou senha inválidos');
 
-        const senhaValida = await bcrypt.compare(senha, usuario.senha)
-        if(!senhaValida) throw new Error('Email ou senha inválidos')
+        const senhaValida = await bcrypt.compare(dados.senha, usuario.senha);
+
+        if(!senhaValida) throw new Error('Email ou senha inválidos');
 
         const token = jwt.sign(
             {id: usuario.id, email: usuario.email, role: usuario.role},
             process.env.JWT_SECRET,
             {expiresIn: '1h'}
-        )
+        );
 
-        return {token}
+        return {token};
+    }
+
+    async buscarPorID(id) {
+        return this.usuarioRepository.buscarPorID(id);
+    }
+
+    async listar() {
+        return this.usuarioRepository.listar();
     }
 }
 
-module.exports = UsuarioService
+module.exports = UsuarioService;

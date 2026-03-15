@@ -1,12 +1,20 @@
-const express = require('express')
-//const UsuarioController = require('../controllers/UsuarioController')
+const express = require('express');
+const authMiddleware = require('../middlewares/authMiddleware');
+const roleMiddleware = require('../middlewares/roleMiddleware');
+const {usuarioController} = require('../container/container');
 
+const router = express.Router();
 
-module.exports = (usuarioController) => {
-    const router = express.Router()
+//Criar usuário
+router.post('/cadastrar', usuarioController.cadastrar);
 
-    router.post('/cadastrar', usuarioController.cadastrar)
-    router.post('/login', usuarioController.login)
+//Login usuário
+router.post('/login', usuarioController.login);
 
-    return router
-}
+//Buscar usuário por id
+router.get('/:id', authMiddleware, usuarioController.buscarPorID);
+
+//Rota apenas para administrador
+router.get('/', authMiddleware, roleMiddleware('admin'), usuarioController.listar);
+
+module.exports = router;
