@@ -1,10 +1,9 @@
-const express = require('express')
+const express = require('express');
+const {agendamentoController} = require('../container/container');
 
-module.exports = (agendamentoController) => {
-    const router = express.Router()
+const router = express.Router();
 
-    router.post('/', agendamentoController.criar)
-    router.get('/', agendamentoController.listar)
+router.post('/', agendamentoController.criar);
+router.get('/', agendamentoController.listar);
 
-    return router
-}
+module.exports = router;

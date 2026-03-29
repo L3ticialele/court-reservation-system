@@ -1,14 +1,12 @@
-const express = require('express')
-const QuadraController = require('../controllers/QuadraController')
+const express = require('express');
+const { quadraController } = require('../container/container');
 
-module.exports = (quadraController) => {
-    const router = express.Router()
+const router = express.Router()
 
-    router.post('/', quadraController.criar)
-    router.get('/', quadraController.listar)
-    router.get('/:id', quadraController.buscarPorId)
-    router.put('/:id', quadraController.atualizar)
-    router.delete('/:id', quadraController.excluir)
+router.post('/', quadraController.criar);
+router.get('/', quadraController.listar);
+router.get('/:id', quadraController.buscarPorId);
+router.put('/:id', quadraController.atualizar);
+router.delete('/:id', quadraController.excluir);
 
-    return router
-}
+module.exports = router;

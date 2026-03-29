@@ -3,13 +3,13 @@ class DateUtils {
     static formatarDataParaIso(dataBR) {
 
         if (!dataBR || !dataBR.includes('/')) {
-            throw new Error('Formato inválido. Use DD/MM/AAAA')
+            throw new Error('Formato inválido. Use DD/MM/AAAA');
         }
 
-        const [dia, mes, ano] = dataBR.split('/')
+        const [dia, mes, ano] = dataBR.split('/');
 
-        return `${ano}-${mes}-${dia}`
+        return `${ano}-${mes}-${dia}`;
     }
 }
 
-module.exports = DateUtils
+module.exports = DateUtils;

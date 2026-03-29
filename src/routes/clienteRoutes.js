@@ -1,13 +1,11 @@
-const express = require('express')
-const ClienteController = require('../controllers/ClienteController')
+const express = require('express');
+const { clienteController } = require('../container/container');
 
-module.exports = (ClienteController) => {
-    const router = express.Router()
+const router = express.Router();
 
-    router.post('/', ClienteController.criar)
-    router.get('/', ClienteController.listar)
-    router.get('/', ClienteController.buscarPorId)
-    router.delete('/', ClienteController.excluir)
+router.post('/', clienteController.criar);
+router.get('/', clienteController.listar);
+router.get('/:id', clienteController.buscarPorId);
+router.delete('/:id', clienteController.excluir);
 
-    return router
-}
+module.exports = router;

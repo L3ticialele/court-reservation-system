@@ -3,11 +3,11 @@ function roleMiddleware(rolesPermitidas){
         if(!rolesPermitidas.includes(req.usuario.role)){
             return res.status(403).json({
                 error: 'Acesso negado'
-            })
+            });
         }
 
-        next()
+        next();
     }
 }
 
-module.exports = roleMiddleware
+module.exports = roleMiddleware;
